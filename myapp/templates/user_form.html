@@ -1,0 +1,140 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ title|default:"Add User" }} - Library</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        body { background-color: #f8f9fa; }
+        .card { border: none; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+        .form-label { font-weight: 500; }
+        .password-help { font-size: 0.875rem; color: #6c757d; }
+        .errorlist { 
+            color: #dc3545; 
+            font-size: 0.875rem; 
+            list-style: none;
+            padding: 0;
+            margin: 5px 0 0 0;
+        }
+        .errorlist li { margin: 0; }
+        .form-control.is-invalid { border-color: #dc3545; }
+    </style>
+</head>
+<body>
+    {% include 'nav.html' %}
+    
+    <div class="container mt-5">
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                <div class="card shadow">
+                    <div class="card-header bg-primary text-white">
+                        <h4 class="mb-0">{{ title|default:"Add User" }}</h4>
+                    </div>
+                    <div class="card-body p-4">
+                        <form method="post" enctype="multipart/form-data">
+                            {% csrf_token %}
+                            
+                            {% if messages %}
+                                {% for message in messages %}
+                                    <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                                        {{ message }}
+                                        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                                    </div>
+                                {% endfor %}
+                            {% endif %}
+                            
+                            <!-- User Information -->
+                            <h6 class="mb-3"><i class="fas fa-user text-primary"></i> User Information</h6>
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label">Username <span class="text-danger">*</span></label>
+                                    {{ user_form.username }}
+                                    {% if user_form.username.errors %}
+                                        <ul class="errorlist">{{ user_form.username.errors }}</ul>
+                                    {% endif %}
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label">Email</label>
+                                    {{ user_form.email }}
+                                    {% if user_form.email.errors %}
+                                        <ul class="errorlist">{{ user_form.email.errors }}</ul>
+                                    {% endif %}
+                                </div>
+                            </div>
+                            
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label">{{ user_form.password.label }}</label>
+                                    {{ user_form.password }}
+                                    {% if user_form.password.errors %}
+                                        <ul class="errorlist">{{ user_form.password.errors }}</ul>
+                                    {% endif %}
+                                    <div class="password-help">Leave blank to keep current password</div>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label">{{ user_form.password_confirm.label }}</label>
+                                    {{ user_form.password_confirm }}
+                                    {% if user_form.password_confirm.errors %}
+                                        <ul class="errorlist">{{ user_form.password_confirm.errors }}</ul>
+                                    {% endif %}
+                                </div>
+                            </div>
+                            
+                            <!-- Profile Information -->
+                            <hr class="my-4">
+                            <h6 class="mb-3"><i class="fas fa-address-card text-primary"></i> Profile Information</h6>
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label">Address</label>
+                                    {{ profile_form.address }}
+                                    {% if profile_form.address.errors %}
+                                        <ul class="errorlist">{{ profile_form.address.errors }}</ul>
+                                    {% endif %}
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label">Phone Number</label>
+                                    {{ profile_form.phone_number }}
+                                    {% if profile_form.phone_number.errors %}
+                                        <ul class="errorlist">{{ profile_form.phone_number.errors }}</ul>
+                                    {% endif %}
+                                </div>
+                            </div>
+                            
+                            <div class="mb-4">
+                                <label class="form-label">Profile Image</label>
+                                {{ profile_form.profile_image }}
+                                {% if profile_form.profile_image.errors %}
+                                    <ul class="errorlist">{{ profile_form.profile_image.errors }}</ul>
+                                {% endif %}
+                                {% if profile_form.instance.profile_image %}
+                                    <div class="mt-2">
+                                        <small class="text-muted">Current: </small>
+                                        <img src="{{ profile_form.instance.profile_image.url }}" 
+                                             style="max-width: 80px; max-height: 80px; border-radius: 8px;" 
+                                             class="img-thumbnail">
+                                    </div>
+                                {% endif %}
+                            </div>
+                            
+                            <div class="d-flex justify-content-between">
+                                <a href="{% url 'user_list' %}" class="btn btn-secondary">
+                                    <i class="fas fa-arrow-left"></i> Cancel
+                                </a>
+                                <button type="submit" class="btn btn-primary px-4">
+                                    <i class="fas fa-save"></i> {{ title|default:"Save User" }}
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

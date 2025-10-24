@@ -1,0 +1,148 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Books - Library</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <style>
+        .book-image { width: 50px; height: 70px; object-fit: cover; border-radius: 6px; }
+        .table-container { max-height: 600px; overflow-y: auto; }
+    </style>
+</head>
+<body>
+    {% include 'nav.html' %}
+    
+    <div class="container mt-5">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h2 ><i class="fas fa-book text-primary "></i>All Books</h2>
+            <a href="{% url 'add_book' %}" class="btn btn-primary">
+                <i class="fas fa-plus"></i> Add Book
+            </a>
+        </div>
+
+        {% if messages %}
+            {% for message in messages %}
+                <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                    {{ message }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>
+            {% endfor %}
+        {% endif %}
+
+        <div class="card shadow">
+            <div class="card-body p-0">
+                <div class="table-responsive table-container">
+                    <table class="table table-hover mb-0">
+                        <thead class="table-dark sticky-top">
+                            <tr>
+                                <th style="width: 100px;">ID</th>
+                                <th style="width: 100px;">Image</th>
+                                <th style="width: 100px;">Title</th>
+                                <th >Author</th>
+                                <th>Category</th>
+                                <th>Description</th>
+                                <th style="width: 120px;">Copies</th>
+                                <th style="width: 200px;">Created</th>
+                                <th style="width: 180px;">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for book in books %}
+                            <tr>
+                                <td><strong>{{ forloop.counter }}</strong></td>
+                                <td>
+                                    {% if book.image %}
+                                        <img src="{{ book.image.url }}" alt="{{ book.title }}" class="book-image">
+                                    {% else %}
+                                        <i class="fas fa-book fa-2x text-muted"></i>
+                                    {% endif %}
+                                </td>
+                                <td>{{ book.title }}</td>
+                                <td>
+                                    <i class="fas fa-user-tie text-primary me-1"></i>
+                                    {{ book.author.name }}
+                                </td>
+                                <td>
+                                    <span class="badge bg-info">
+                                        {{ book.category.name }}
+                                    </span>
+                                </td>
+                                <td>{{ book.description|truncatewords:10|default:"No description" }}</td>
+                                <td><span style="color:rgb(62, 197, 250);">{{ book.copies }}</span></td>
+                                <td>{{ book.created_at|date:"M d, Y" }}</td>
+                                <td>
+                                    <div class="btn-group btn-group-sm" role="group">
+                                        <a href="{% url 'edit_book' book.id %}" title="Edit">
+                                            <!-- <i class="fas fa-edit"></i> -->
+                                            <!-- <button type="button" class="btn btn-success" id="edit"></button>Edit</button> -->
+                                             <button type="button" class="btn btn-success" id="edit">Edit</button>
+                                        </a>
+                                        <a href="{% url 'delete_book' book.id %}" 
+                                           onclick="return confirm('Are you sure you want to delete {{ book.title }}?')" title="Delete">
+                                            <!-- <i class="fas fa-trash"></i> -->
+                                             <button type="button" class="btn btn-danger" id="delete">Delete</button>
+                                        </a>
+                                    </div>
+                                </td>
+                            </tr>
+                            {% empty %}
+                            <tr>
+                                <td colspan="9" class="text-center py-5 text-muted">
+                                    <i class="fas fa-book fa-4x mb-3 opacity-50"></i>
+                                    <h5>No books found</h5>
+                                    <p class="mb-0">Get started by <a href="{% url 'add_book' %}" class="text-primary">adding your first book</a></p>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            {% if books.has_other_pages %}
+            <div class="card-footer bg-light border-0">
+                <div class="row align-items-center">
+                    <div class="col-md-6">
+                        <small class="text-muted">
+                            Showing {{ books.start_index|add:1 }} to {{ books.end_index }} of {{ books.paginator.count }} books
+                        </small>
+                    </div>
+                    <div class="col-md-6 text-end">
+                        <nav>
+                            <ul class="pagination pagination-sm mb-0">
+                                {% if books.has_previous %}
+                                    <li class="page-item">
+                                        <a class="page-link" href="?page=1">&laquo; First</a>
+                                    </li>
+                                    <li class="page-item">
+                                        <a class="page-link" href="?page={{ books.previous_page_number }}">Previous</a>
+                                    </li>
+                                {% endif %}
+                                
+                                <li class="page-item active">
+                                    <span class="page-link">Page {{ books.number }} of {{ books.paginator.num_pages }}</span>
+                                </li>
+                                
+                                {% if books.has_next %}
+                                    <li class="page-item">
+                                        <a class="page-link" href="?page={{ books.next_page_number }}">Next</a>
+                                    </li>
+                                    <li class="page-item">
+                                        <a class="page-link" href="?page={{ books.paginator.num_pages }}">Last &raquo;</a>
+                                    </li>
+                                {% endif %}
+                            </ul>
+                        </nav>
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

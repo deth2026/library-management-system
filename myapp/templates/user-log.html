@@ -1,0 +1,25 @@
+<!-- templates/user-log.html -->
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Log</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,300,0,0"/>
+</head>
+<body>
+    {% include 'nav.html' %}
+    <main>
+        <h1>User Activity Log</h1>
+        <p>This page displays the user's activity log. Extend with actual log data as needed.</p>
+        <!-- Placeholder for log entries -->
+        <ul>
+            <li>Example log entry 1: Logged in at [timestamp]</li>
+            <li>Example log entry 2: Borrowed book [title] at [timestamp]</li>
+            <!-- Add more dynamic content here -->
+        </ul>
+    </main>
+</body>
+</html>

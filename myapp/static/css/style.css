@@ -1,0 +1,429 @@
+/* -------------------------------
+   GLOBAL RESET & BASE STYLES
+-------------------------------- */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html,
+body {
+    height: 100%;
+    font-family: 'Roboto', Verdana, Geneva, Tahoma, sans-serif;
+    color: #333;
+    line-height: 1.6;
+    background-color: #f4f4f9;
+}
+
+/* -------------------------------
+   NAVIGATION
+-------------------------------- */
+nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #ffffff;
+    padding: 15px 30px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+}
+
+nav .left h2 {
+    color: #6b48ff;
+    font-size: 1.8em;
+}
+
+nav .right {
+    display: flex;
+    align-items: center;
+    gap: 25px;
+}
+
+nav .right a {
+    text-decoration: none;
+    color: #333;
+    font-weight: 500;
+    transition: color 0.3s;
+}
+
+nav .right a:hover {
+    color: #6b48ff;
+}
+
+.sign-in {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    background-color: #f0f0f0;
+    padding: 6px 12px;
+    border-radius: 20px;
+}
+
+.material-symbols-outlined {
+    font-size: 22px;
+    color: #666;
+}
+
+/* -------------------------------
+   HOME PAGE (FULL-SCREEN LAYOUT)
+-------------------------------- */
+.main-home {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background: linear-gradient(135deg, #ff6f61, #6b48ff);
+    color: #fff;
+    text-align: center;
+    padding: 2rem;
+    animation: slideIn 1.2s ease-out;
+}
+
+.content {
+    max-width: 700px;
+}
+
+.content h1 {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+    text-shadow: 2px 2px 10px rgba(0, 0, 0, 0.3);
+}
+
+.content p {
+    font-size: 1.25rem;
+    line-height: 1.6;
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+/* -------------------------------
+   LOGIN / REGISTER PAGE
+-------------------------------- */
+.main-log {
+    background: linear-gradient(135deg, #ff6f61, #6b48ff);
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.login-container {
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    border-radius: 15px;
+    padding: 30px;
+    text-align: center;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
+    animation: fadeIn 1s ease-in-out;
+}
+
+.form {
+    display: flex;
+    flex-direction: row;
+    gap: 12px;
+}
+
+.login-container img {
+    border-radius: 50%;
+    width: 80px;
+    margin-bottom: 20px;
+}
+
+.login-container h2 {
+    color: white;
+    margin-bottom: 20px;
+}
+
+.login-container input {
+    width: 80%;
+    margin: 10px auto;
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    background: rgba(255, 255, 255, 0.3);
+    color: white;
+    font-size: 16px;
+}
+
+.form-group {
+    margin-bottom: 5px;
+}
+
+.form-group label {
+    display: block;
+    /* margin-left: 100px; */
+    text-align: start;
+    padding: 0px 10px;
+
+}
+
+.form-group input {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+}
+
+.error {
+    color: red;
+    margin-top: 5px;
+}
+
+.success {
+    color: green;
+    margin-top: 5px;
+}
+
+#summit {
+    width: 120px;
+    /* background: #000; */
+}
+
+button {
+    background: #007bff;
+    color: white;
+    padding: 12px 30px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    width: 100%;
+    font-size: 16px;
+}
+
+button:hover {
+    background: #0056b3;
+}
+
+.login-container input::placeholder {
+    color: rgba(255, 255, 255, 0.7);
+}
+
+.profile-header {
+    background: linear-gradient(135deg, #007bff, #0056b3);
+    color: white;
+    padding: 50px 20px;
+    border-radius: 12px;
+    text-align: center;
+    position: relative;
+    height: 300px;
+}
+
+.profile-header img {
+    width: 130px;
+    height: 130px;
+    object-fit: cover;
+    border: 4px solid #fff;
+    border-radius: 50%;
+    margin-bottom: 15px;
+    background: #fff;
+}
+
+.profile-header h2 {
+    font-weight: 700;
+}
+
+.profile-header small {
+    opacity: 0.9;
+}
+
+.info-card {
+    border: none;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    transition: 0.3s;
+}
+
+.info-card:hover {
+    transform: translateY(-3px);
+}
+
+.info-title {
+    font-weight: 600;
+    color: #555;
+    font-size: 0.9rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.info-value {
+    font-size: 1.1rem;
+    color: #212529;
+}
+
+.btn-back {
+    background: #e9ecef;
+    color: #333;
+    font-weight: 600;
+}
+
+.btn-back:hover {
+    background: #dee2e6;
+}
+
+.login-container button {
+    width: 80%;
+    padding: 10px;
+    margin: 20px 0;
+    border: none;
+    border-radius: 5px;
+    background: #d3aaff;
+    color: white;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+.login-container button:hover {
+    background: #c68cff;
+}
+
+.login-container a {
+    color: #d3aaff;
+    font-size: 12px;
+    text-decoration: none;
+}
+
+.login-container a:hover {
+    text-decoration: underline;
+}
+
+/* -------------------------------
+   BOOK PAGE (TABLE)
+-------------------------------- */
+section.body {
+    max-width: 1200px;
+    margin: 100px auto;
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+}
+#delete{
+    margin-left: 3px;
+    padding: 3px 5px;
+}
+#edit{
+    margin-right: 5px;
+    padding: 3px 5px;
+}
+
+
+section.body h2 {
+    margin-bottom: 20px;
+    color: #333;
+}
+
+.add-btn {
+    background-color: #28a745;
+    color: white;
+    padding: 10px 15px;
+    border-radius: 5px;
+    margin-bottom: 20px;
+    display: inline-block;
+    transition: background-color 0.3s;
+}
+
+.add-btn:hover {
+    background-color: #218838;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: #fff;
+}
+
+th,
+td {
+    padding: 12px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+}
+
+th {
+    background-color: #f8f9fa;
+    font-weight: bold;
+}
+
+tr:hover {
+    background-color: #f5f5f5;
+}
+
+.action-btn {
+    padding: 6px 10px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+.edit-btn {
+    background-color: #ffc107;
+    color: #333;
+}
+
+.edit-btn:hover {
+    background-color: #e0a800;
+}
+
+.delete-btn {
+    background-color: #dc3545;
+    color: white;
+}
+
+.delete-btn:hover {
+    background-color: #c82333;
+}
+
+/* -------------------------------
+   ANIMATIONS
+-------------------------------- */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: translateX(-50px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+/* -------------------------------
+   RESPONSIVE DESIGN
+-------------------------------- */
+@media (max-width: 768px) {
+    nav {
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    nav .right {
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+
+    .content h1 {
+        font-size: 2rem;
+    }
+
+    .login-container {
+        width: 90%;
+    }
+}
