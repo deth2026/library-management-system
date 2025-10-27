@@ -281,6 +281,7 @@ def category_list(request):
     return render(request, 'category.html', {'categories': categories_page})
 
 
+
 @login_required
 def add_category(request):
     if request.method == 'POST':
@@ -379,3 +380,45 @@ def delete_author(request, pk):
             messages.error(request, f'Error deleting author: {str(e)}')
         return redirect('author_list')
     return render(request, 'author_confirm_delete.html', {'author': author})
+
+#/// search book///
+# from django.db.models import Q
+# from django.core.paginator import Paginator
+# from .models import Book, Category, Author
+
+# def book_list(request):
+#     books_list = Book.objects.all().order_by('-created_at')
+#     categories = Category.objects.all()
+#     authors = Author.objects.all()
+
+#     # Search functionality
+#     search_query = request.GET.get('search', '')
+#     category = request.GET.get('category', '')
+#     author = request.GET.get('author', '')
+
+#     if search_query:
+#         books_list = books_list.filter(
+#             Q(title__icontains=search_query) |
+#             Q(description__icontains=search_query) |
+#             Q(author__name__icontains=search_query)
+#         )
+
+#     if category:
+#         books_list = books_list.filter(category_id=category)
+
+#     if author:
+#         books_list = books_list.filter(author_id=author)
+
+#     # Pagination
+#     paginator = Paginator(books_list, 10)  # Show 10 books per page
+#     page = request.GET.get('page')
+#     books = paginator.get_page(page)
+
+#     context = {
+#         'books': books,
+#         'categories': categories,
+#         'authors': authors,
+#         'search_query': search_query,
+#     }
+    
+#     return render(request, 'book.html', context)

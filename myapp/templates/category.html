@@ -12,17 +12,46 @@
         .table-container { max-height: 600px; overflow-y: auto; }
     </style>
 </head>
-<body>
+<body>  
     {% include 'nav.html' %}
-    
-    <div class="container mt-5">
+     <h1 class="text-head">All Category In Library</h1>
+    <div class="dashboard">
+       
+        <div class="card blue">
+            <div class="card-icon"><i class="fas fa-cogs"></i></div>
+            <div class="card-header">
+                <h3 class="card-title">English</h3>
+            </div>
+            <div class="card-content">
+                <p>A collection of classic and modern English literature books.</p>
+            </div>
+        </div>
+        <div class="card purple">
+            <div class="card-icon"><i class="fas fa-font"></i></div>
+            <div class="card-header">
+                <h3 class="card-title">Professional life</h3>
+            </div>
+            <div class="card-content">
+                <p>Corag aments veolpa ameardgirdoreou oast thglirveoblite</p>
+            </div>
+        </div>
+        <div class="card blue">
+            <div class="card-icon"><i class="fas fa-th-large"></i></div>
+            <div class="card-header">
+                <h3 class="card-title">Web Desinge</h3>
+            </div>
+            <div class="card-content">
+                <p>Corag aments veolpa ameardgirdoreou oast thglirveoblite</p>
+            </div>
+        </div>
+    </div>
+    <div class="container mt-5" style="height: 100vh;">
         <div class="d-flex justify-content-between align-items-center mb-4">
             <h2><i class="fas fa-tags text-primary"></i> Categories </h2>
             <a href="{% url 'add_category' %}" class="btn btn-primary">
                 <i class="fas fa-plus"></i> Add Category
             </a>
         </div>
-
         {% if messages %}
             {% for message in messages %}
                 <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
@@ -36,14 +65,13 @@
             <div class="card-body p-0">
                 <div class="table-responsive table-container">
                     <table class="table table-hover mb-0">
-                        <thead class="table-dark sticky-top">
+                        <thead class="table-dark sticky-top sky-blue">
                             <tr>
-                                <th style="width: 60px;">ID</th>
-                                <!-- <th style="width: 80px;">Icon</th> -->
+                                <th style="width: 100px;">ID</th>
                                 <th>Name</th>
                                 <th>Description</th>
-                                <th style="width: 120px;">Created</th>
-                                <th style="width: 120px;">Actions</th>
+                                <th style="width: 180px;">Created</th>
+                                <th style="width: 180px;">Actions</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -58,12 +86,13 @@
                                 <td><span class="badge bg-light text-dark px-3 py-2">{{ category.created_at|date:"M d, Y" }}</span></td>
                                 <td>
                                     <div class="btn-group btn-group-sm" role="group">
-                                        <a href="{% url 'edit_category' category.id %}" class="btn btn-outline-primary" title="Edit">
-                                            <i class="fas fa-edit"></i>
+                                        <a href="{% url 'edit_category' category.id %}" title="Edit">
+                                             <button type="button" class="btn btn-success" id="edit">Edit</button>
                                         </a>
-                                        <a href="{% url 'delete_category' category.id %}" class="btn btn-outline-danger" 
+                                        <a href="{% url 'delete_category' category.id %}"
                                            onclick="return confirm('Are you sure you want to delete category \"{{ category.name }}\"?')" title="Delete">
-                                            <i class="fas fa-trash"></i>
+                                             <button type="button" class="btn btn-danger" id="delete">Delete</button>
+
                                         </a>
                                     </div>
                                 </td>

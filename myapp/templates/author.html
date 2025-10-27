@@ -40,7 +40,7 @@
                         <thead class="table-dark sticky-top">
                             <tr>
                                 <th style="width: 60px;">ID</th>
-                                <th style="width: 80px;">Photo</th>
+                                <th style="width: 120px;">Profile</th>
                                 <th>Name</th>
                                 <th>Biography</th>
                                 <th style="width: 120px;">Created</th>
@@ -59,7 +59,7 @@
                                     </div>
                                 </td>
                                 <td>
-                                    <h6 class="mb-0 fw-bold text-primary">{{ author.name }}</h6>
+                                    <h6 class="mb-0 fw-bold text-success">{{ author.name }}</h6>
                                     <small class="text-muted">
                                         <i class="fas fa-book me-1"></i>
                                         {{ author.book_set.count }} book{{ author.book_set.count|pluralize }}
@@ -68,7 +68,7 @@
                                 <td>{{ author.biography|truncatewords:15|default:"No biography available" }}</td>
                                 <td><span class="badge bg-light text-dark px-3 py-2">{{ author.created_at|date:"M d, Y" }}</span></td>
                                 <td>
-                                    <span class="badge bg-success">
+                                    <span style="color: rgb(7, 155, 7);">
                                         {{ author.book_set.count }}
                                     </span>
                                 </td>

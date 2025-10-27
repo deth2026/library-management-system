@@ -4,7 +4,7 @@
         <h2><a href="{% url 'home' %}">Library</a></h2>
     </div>
     <div class="right">
-        <a href="{% url 'home' %}">Home</a>
+        <a href="{% url 'home' %}" >Home</a>
         <a href="{% url 'book_list' %}">Books</a>
         <a href="{% url 'category_list' %}">Categories</a>
         <a href="{% url 'author_list' %}">Authors</a>
@@ -30,6 +30,7 @@
                 </a>
             </div>
         {% else %}
+
             <a href="{% url 'login' %}">Login</a>
             <a href="{% url 'register' %}">Register</a>
             <div class="sign-in d-flex align-items-center">
