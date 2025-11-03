@@ -30,7 +30,8 @@ python management.py runserver
 - Frontend using HTML, CSS, and JavaScript
 - Responsive design implemented using Bootstrap
 - CRUD operations for managing books and members
-- User-friendly dashboard and clean interface
+- User-friendly  and clean interface
+- Dashboard show information
 
 
 ## 📂 Folder Structure of project
@@ -82,6 +83,25 @@ myapp/
 ## 💻 Link of Using 
 - Django:  https://docs.djangoproject.com/
 - Bootstrap:  https://getbootstrap.com/docs/
+## 🖼️ Image Show System 
 
+## 🔐 Login Form
+![alt text](image-1.png)
 
+## 🔐 Register form
+![alt text](image-2.png)
 
+## 📚 Book List
+![alt text](image-3.png)
+
+## 🎨 Category 
+![alt text](image-4.png)
+
+## 👤 Author
+![alt text](image-5.png)
+
+## 👤 User List
+![alt text](image-6.png)
+
+## ⚙️ Dashboard
+![alt text](image-7.png) 
