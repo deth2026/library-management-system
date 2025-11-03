@@ -1,0 +1,59 @@
+{% extends 'nav.html' %}
+
+{% block content %}
+<div class="search-results-container">
+    <h2>Search Results for "{{ query }}"</h2>
+    {% if search_type == 'all' or search_type == 'books' %}
+    <section class="search-section">
+        <h3>Books</h3>
+        {% if books %}
+        <div class="results-grid">
+            {% for book in books %}
+            <div class="result-card">
+                {% if book.cover_image %}
+                    <img src="{{ book.cover_image.url }}" alt="{{ book.title }}" class="result-image">
+                {% else %}
+                    <div class="no-image">No Cover</div>
+                {% endif %}
+                <div class="result-content">
+                    <h4>{{ book.title }}</h4>
+                    <p>Author: {{ book.author.name }}</p>
+                    <p>Category: {{ book.category.name }}</p>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        {% else %}
+        <p>No books found.</p>
+        {% endif %}
+    </section>
+    {% endif %}
+
+
+    {% if search_type == 'all' or search_type == 'users' %}
+    <section class="search-section">
+        <h3>Users</h3>
+        {% if users %}
+        <div class="results-grid">
+            {% for user in users %}
+            <div class="result-card">
+                {% if user.userprofile.profile_image %}
+                    <img src="{{ user.userprofile.profile_image.url }}" alt="{{ user.username }}" class="result-image">
+                {% else %}
+                    <div class="profile-placeholder">{{ user.username.0|upper }}</div>
+                {% endif %}
+                <div class="result-content">
+                    <h4>{{ user.username }}</h4>
+                    <p>{{ user.email }}</p>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        {% else %}
+        <p>No users found.</p>
+        {% endif %}
+    </section>
+    {% endif %}
+
+</div>
+{% endblock %}

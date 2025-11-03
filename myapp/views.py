@@ -3,6 +3,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.contrib import messages
+from django.db.models import Q
 from django.db import transaction, IntegrityError
 from .models import Book, UserProfile, Category, Author
 from .forms import (
@@ -154,6 +155,35 @@ def add_user(request):
         'title': 'Add User'
     })
 
+@login_required
+def user_search(request):
+    query = request.GET.get('q', '').strip()
+    filter_type = request.GET.get('filter', 'all')
+    
+    users_qs = User.objects.prefetch_related(
+        Prefetch('userprofile', queryset=UserProfile.objects.all())
+    ).order_by('-date_joined')
+    
+    if query:
+        if filter_type == 'username':
+            users_qs = users_qs.filter(username__icontains=query)
+        elif filter_type == 'email':
+            users_qs = users_qs.filter(email__icontains=query)
+        elif filter_type == 'address':
+            users_qs = users_qs.filter(userprofile__address__icontains=query)
+        else:  # 'all'
+            users_qs = users_qs.filter(
+                Q(username__icontains=query) |
+                Q(email__icontains=query) |
+                Q(userprofile__address__icontains=query) |
+                Q(userprofile__phone_number__icontains=query)
+            )
+    
+    paginator = Paginator(users_qs, 10)
+    page_number = request.GET.get('page')
+    users_page = paginator.get_page(page_number)
+    return render(request, 'user.html', {'users': users_page, 'search_query': query})
+
 
 @login_required
 def edit_user(request, pk):
@@ -271,6 +301,43 @@ def delete_book(request, pk):
     return render(request, 'book_confirm_delete.html', {'book': book})
 
 
+from django.shortcuts import render, get_object_or_404
+from .models import Book
+
+def book_detail(request, pk):
+    book = get_object_or_404(Book, pk=pk)
+    return render(request, 'book_view.html', {'book': book})
+
+
+@login_required
+def book_search(request):
+    query = request.GET.get('q', '').strip()
+    filter_type = request.GET.get('filter', 'all')
+    
+    books = Book.objects.select_related('author', 'category').order_by('-created_at')
+    
+    if query:
+        if filter_type == 'title':
+            books = books.filter(title__icontains=query)
+        elif filter_type == 'author':
+            books = books.filter(author__name__icontains=query)
+        elif filter_type == 'category':
+            books = books.filter(category__name__icontains=query)
+        else:  # 'all'
+            books = books.filter(
+                Q(title__icontains=query) |
+                Q(description__icontains=query) |
+                Q(author__name__icontains=query) |
+                Q(category__name__icontains=query)
+            )
+    
+    paginator = Paginator(books, 10)
+    page_number = request.GET.get('page')
+    books_page = paginator.get_page(page_number)
+    return render(request, 'book.html', {'books': books_page, 'search_query': query})
+
+
+
 # ================== CATEGORIES ==================
 @login_required
 def category_list(request):
@@ -327,6 +394,53 @@ def delete_category(request, pk):
     return render(request, 'category_confirm_delete.html', {'category': category})
 
 
+# ================== SEARCH ==================
+@login_required
+def search(request):
+    query = request.GET.get('q', '').strip()
+    search_type = request.GET.get('type', 'all')
+    
+    context = {
+        'query': query,
+        'search_type': search_type,
+        'books': None,
+        'users': None,
+        'authors': None,
+        'categories': None
+    }
+    
+    if query:
+        if search_type in ['all', 'books']:
+            books = Book.objects.filter(
+                Q(title__icontains=query) |
+                Q(description__icontains=query) |
+                Q(author__name__icontains=query) |
+                Q(category__name__icontains=query)
+            ).select_related('author', 'category').distinct()
+            context['books'] = books[:10]  # Limit to 10 results
+            
+        if search_type in ['all', 'users']:
+            users = User.objects.filter(
+                Q(username__icontains=query) |
+                Q(email__icontains=query) |
+                Q(userprofile__address__icontains=query)
+            ).prefetch_related('userprofile').distinct()
+            context['users'] = users[:10]
+            
+        if search_type in ['all', 'authors']:
+            authors = Author.objects.filter(
+                Q(name__icontains=query)
+            ).prefetch_related('book_set').distinct()
+            context['authors'] = authors[:10]
+            
+        if search_type in ['all', 'categories']:
+            categories = Category.objects.filter(
+                Q(name__icontains=query)
+            ).prefetch_related('book_set').distinct()
+            context['categories'] = categories[:10]
+    
+    return render(request, 'search_results.html', context)
+
 # ================== AUTHORS ==================
 @login_required
 def author_list(request):
@@ -381,44 +495,24 @@ def delete_author(request, pk):
         return redirect('author_list')
     return render(request, 'author_confirm_delete.html', {'author': author})
 
-#/// search book///
-# from django.db.models import Q
-# from django.core.paginator import Paginator
-# from .models import Book, Category, Author
+# ================== DASHBOARD ==================
 
-# def book_list(request):
-#     books_list = Book.objects.all().order_by('-created_at')
-#     categories = Category.objects.all()
-#     authors = Author.objects.all()
+@login_required
+def dashboard(request):
+    total_users = User.objects.count()
+    total_books = Book.objects.count()
+    total_authors = Author.objects.count()
+    total_categories = Category.objects.count()
 
-#     # Search functionality
-#     search_query = request.GET.get('search', '')
-#     category = request.GET.get('category', '')
-#     author = request.GET.get('author', '')
+    recent_users = User.objects.order_by('-date_joined')[:5]
+    recent_books = Book.objects.order_by('-created_at')[:5]
 
-#     if search_query:
-#         books_list = books_list.filter(
-#             Q(title__icontains=search_query) |
-#             Q(description__icontains=search_query) |
-#             Q(author__name__icontains=search_query)
-#         )
-
-#     if category:
-#         books_list = books_list.filter(category_id=category)
-
-#     if author:
-#         books_list = books_list.filter(author_id=author)
-
-#     # Pagination
-#     paginator = Paginator(books_list, 10)  # Show 10 books per page
-#     page = request.GET.get('page')
-#     books = paginator.get_page(page)
-
-#     context = {
-#         'books': books,
-#         'categories': categories,
-#         'authors': authors,
-#         'search_query': search_query,
-#     }
-    
-#     return render(request, 'book.html', context)
+    context = {
+        'total_users': total_users,
+        'total_books': total_books,
+        'total_authors': total_authors,
+        'total_categories': total_categories,
+        'recent_users': recent_users,
+        'recent_books': recent_books,
+    }
+    return render(request, 'dashboard.html', context)

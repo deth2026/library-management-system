@@ -37,7 +37,7 @@
             <div class="card-body p-0">
                 <div class="table-responsive table-container">
                     <table class="table table-hover mb-0">
-                        <thead class="table-dark sticky-top">
+                        <thead class="table-success sticky-top">
                             <tr>
                                 <th style="width: 60px;">ID</th>
                                 <th style="width: 120px;">Profile</th>
@@ -75,11 +75,11 @@
                                 <td>
                                     <div class="btn-group btn-group-sm" role="group">
                                         <a href="{% url 'edit_author' author.id %}" class="btn btn-outline-primary" title="Edit">
-                                            <i class="fas fa-edit"></i>
+                                            <i class="fas fa-edit"></i>Edit
                                         </a>
                                         <a href="{% url 'delete_author' author.id %}" class="btn btn-outline-danger" 
-                                           onclick="return confirm('Are you sure you want to delete author \"{{ author.name }}\"? This will also delete all their books!')" title="Delete">
-                                            <i class="fas fa-trash"></i>
+                                           onclick="return confirm('Are you sure you want to delete author \"{{ author.name }}\"? This will also delete all their books!')" title="Delete" style="padding: 8px; height: 40px;">
+                                            <i class="fas fa-trash"></i>Delete
                                         </a>
                                     </div>
                                 </td>

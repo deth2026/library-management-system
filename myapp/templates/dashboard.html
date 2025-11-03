@@ -1,0 +1,240 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dasebord</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <link rel="stylesheet"href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,300,0,0"/>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        .dashboard-header {
+            margin-top: 70px;
+            margin-bottom: 30px;
+        }
+        .indicator-card {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+            transition: all 0.3s ease;
+            height: 100%;
+            border: none;
+            overflow: hidden;
+        }
+        .indicator-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 24px rgba(0, 0, 0, 0.1);
+        }
+        .card-header {
+            padding: 12px 20px;
+            font-size: 0.9rem;
+            font-weight: 500;
+            color: #6c757d;
+            border-bottom: 1px solid #eee;
+        }
+        .card-body {
+            padding: 20px;
+            text-align: left;
+        }
+        .indicator-value {
+            font-size: 2.2rem;
+            font-weight: 700;
+            margin: 8px 0;
+        }
+        .indicator-icon {
+            font-size: 1.8rem;
+            opacity: 0.2;
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+        .bg-books { border-left: 5px solid #007bff; }
+        .bg-users { border-left: 5px solid #28a745; }
+        .bg-authors { border-left: 5px solid #ffc107; }
+        .bg-categories { border-left: 5px solid #17a2b8; }
+
+        .card1{
+            width: 300px;
+            height: 200px;
+            background-color: #f8fafb;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            color: #333;
+        }
+        /* .left-card img{
+            width: 140px;
+            height: 100px;
+            border-radius: 10px;
+            margin-left: 10px;
+        }
+     */
+    </style>
+</head>
+<body>
+    {% include 'nav.html' %}
+    <div class="container dashboard-header">
+    <div class="row align-items-center">
+        <div class="col">
+            <h2 class="mb-0 text-primary fw-bold"  >Library Dashboard</h2>
+        </div>
+        <div class="col-auto">
+            <button class="btn btn-outline-secondary btn-sm">
+                <i class="fas fa-sync-alt"></i> Refresh
+            </button>
+        </div>
+    </div>
+</div>
+
+<div class="container">
+    <div class="row g-4" style="display: flex; justify-content: center;">
+
+        <!-- Total Books -->
+        <div class="col-md-3" style="width: 320px; height: 250px;">
+            <div class="card indicator-card bg-books position-relative">
+                <div class="card-header" style="margin-top: 5px; background-color: #24a8ea;"  >Total Books</div>
+                <div class="card-body">
+                    <div class="indicator-value text-primary" style="margin-top: 1px;">{{ total_books }}</div>
+                    <p class="text-muted mb-0 small">All registered books</p>
+                </div>
+                <i class="fas fa-book indicator-icon text-primary"></i>
+            </div>
+        </div>
+
+        <!-- Total Users -->
+        <div class="col-md-3" style="width: 320px; height: 250px;">
+            <div class="card indicator-card bg-users position-relative">
+                <div class="card-header" style="margin-top: 5px; background-color: rgb(157, 244, 157);" >Total Users</div>
+                <div class="card-body" >
+                    <div class="indicator-value text-success" style="margin-top: 1px;">{{ total_users }}</div>
+                    <p class="text-muted mb-0 small">Active members</p>
+                </div>
+                <i class="fas fa-users indicator-icon text-success"></i>
+            </div>
+        </div>
+
+        <!-- Total Authors -->
+        <div class="col-md-3" style="width: 320px; height: 250px;">
+            <div class="card indicator-card bg-authors position-relative">
+                <div class="card-header" style="margin-top: 5px; background-color: #fbdf89;">Total Authors</div>
+                <div class="card-body">
+                    <div class="indicator-value text-warning" style="margin-top: 5px;">{{ total_authors }}</div>
+                    <p class="text-muted mb-0 small">Unique authors</p>
+                </div>
+                <i class="fas fa-feather-alt indicator-icon text-warning"></i>
+            </div>
+        </div>
+
+        <!-- Total Categories -->
+        <div class="col-md-3" style="width: 320px; height: 250px;">
+            <div class="card indicator-card bg-categories position-relative">
+                <div class="card-header bg-info" style="margin-top: 5px;">Total Categories</div>
+                <div class="card-body">
+                    <div class="indicator-value text-info" style="margin-top: 5px;">{{ total_categories }}</div>
+                    <p class="text-muted mb-0 small">Book genres</p>
+                </div>
+                <i class="fas fa-folder indicator-icon text-info"></i>
+            </div>
+        </div>
+    </div>
+</div>
+<section></section>
+
+<div class="container mt-5 bg-success" style=" display: flex; justify-content: center; border-radius: 20px;" >
+        <!-- CHART: NEW BOOKS ADDED THIS​ WEEK -->
+        <div class="row" style="width: 2000px;">
+            <div class="col-lg-13 mx-auto">
+                <div class="card shadow-sm">
+                    <div class="card-header bg-white d-flex justify-content-between align-items-center">
+                        <h5 class="mb-0">
+                            <i class="fas fa-plus-circle text-success me-2"></i>
+                            New Books Added This Week
+                        </h5>
+                        <span class="badge bg-warning fs-6">{{ total_books }}</span>
+                    </div>
+                    <div class="card-body p-4">
+                        <div class="chart-container" style="height: 300px;">
+                            <canvas id="newBooksChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- CHART SCRIPT -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const ctx = document.getElementById('newBooksChart').getContext('2d');
+
+            const gradient = ctx.createLinearGradient(0, 0, 0, 300);
+            gradient.addColorStop(0, 'rgba(34, 197, 94, 0.3)');
+            gradient.addColorStop(1, 'rgba(34, 197, 94, 0.05)');
+
+            new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+                    datasets: [{
+                        label: 'New Books',
+                        data: [1, 2, 3, 4 , 5 , 6 ,7,],
+                        borderColor: '#22c55e',
+                        backgroundColor: gradient,
+                        fill: true,
+                        tension: 0.4,
+                        pointBackgroundColor: '#22c55e',
+                        pointBorderColor: '#fff',
+                        pointBorderWidth: 2,
+                        pointRadius: 6,
+                        pointHoverRadius: 8,
+                        borderWidth: 3
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: false },
+                        tooltip: {
+                            backgroundColor: 'rgba(0,0,0,0.8)',
+                            titleColor: '#fff',
+                            bodyColor: '#fff',
+                            cornerRadius: 8,
+                            displayColors: false
+                        }
+                    },
+                    scales: {
+                            y: {
+                                beginAtZero: false,        
+                                min: 1,                    
+                                max: 7,                    
+                                ticks: {
+                                    stepSize: 1,           
+                                    font: { size: 12 }
+                                },
+                                grid: { color: 'rgba(0,0,0,0.05)' }
+                            },
+                            x: {
+                                grid: { display: false },
+                                ticks: { font: { size: 12 } }
+                            }
+                        },
+                    animation: {
+                        duration: 2000,
+                        easing: 'easeInOutQuart'
+                    }
+                }
+            });
+        });
+    </script>
+        
+</body>
+</html>

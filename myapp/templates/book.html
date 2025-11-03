@@ -5,7 +5,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Books - Library</title>
+    <title>Books-Library</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
@@ -26,13 +26,27 @@
 
 <body>
     {% include 'nav.html' %}
-
     <div class="container mt-5">
         <div class="d-flex justify-content-between align-items-center mb-4">
-            <h2><i class="fas fa-book text-primary "></i>All Books</h2>
-            <a href="{% url 'add_book' %}" class="btn btn-primary">
-                <i class="fas fa-plus"></i> Add Book
-            </a>
+            <h2><i class="fas fa-book text-primary"></i>All Books</h2>
+            <div class="d-flex gap-2">
+                <div class="search-container">
+                    <form action="{% url 'book_search' %}" method="GET" class="d-flex gap-2" style="margin-top: 43px; margin-right: 18 px;">
+                        <div class="input-group" style="width: 500px; height: 44px;">
+                            <input type="text" name="q" class="form-control" placeholder="Search books..." value="{{ request.GET.q }}">
+                            <select name="filter" class="form-select" style="max-width: 120px;">
+                                <option value="all">All Fields</option>
+                                <option value="title">Title</option>
+                                <option value="author">Author</option>
+                                <option value="category">Category</option>    
+                            </select>
+                        </div>
+                    </form>
+                </div>
+                <a href="{% url 'add_book' %}" class="btn btn-primary" style="width: 115px; height: 40px; margin-top: 44px";>
+                    <i class="fas fa-plus"></i> Add Book
+                </a>
+            </div>
         </div>
 
         {% if messages %}
@@ -48,7 +62,7 @@
             <div class="card-body p-0">
                 <div class="table-responsive table-container">
                     <table class="table table-hover mb-0">
-                        <thead class="table-dark sticky-top">
+                        <thead class="table-success sticky-top">
                             <tr>
                                 <th style="width: 100px;">ID</th>
                                 <th style="width: 100px;">Image</th>
@@ -92,6 +106,10 @@
                                         </a>
                                         <a href="{% url 'delete_book' book.id %}">
                                             <button type="button" class="btn btn-danger" id="delete">Delete</button>
+
+                                        </a>
+                                         <a href="{% url 'book_detail' book.id %}">
+                                            <button type="button" class="btn btn-primary" id="delete" style="margin-left: 6px;">View</button>
                                         </a>
                                     </div>
                                 </td>
