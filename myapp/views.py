@@ -85,6 +85,7 @@ def logout_view(request):
 
 
 # ================== USER PROFILE HELP ==================
+
 def get_user_profile_or_create(user):
     profile, created = UserProfile.objects.get_or_create(user=user)
     return profile
@@ -171,7 +172,7 @@ def user_search(request):
             users_qs = users_qs.filter(email__icontains=query)
         elif filter_type == 'address':
             users_qs = users_qs.filter(userprofile__address__icontains=query)
-        else:  # 'all'
+        else: 
             users_qs = users_qs.filter(
                 Q(username__icontains=query) |
                 Q(email__icontains=query) |
@@ -323,7 +324,7 @@ def book_search(request):
             books = books.filter(author__name__icontains=query)
         elif filter_type == 'category':
             books = books.filter(category__name__icontains=query)
-        else:  # 'all'
+        else:  
             books = books.filter(
                 Q(title__icontains=query) |
                 Q(description__icontains=query) |
@@ -331,6 +332,7 @@ def book_search(request):
                 Q(category__name__icontains=query)
             )
     
+
     paginator = Paginator(books, 10)
     page_number = request.GET.get('page')
     books_page = paginator.get_page(page_number)
